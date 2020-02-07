@@ -37,8 +37,10 @@ fps_controller = pygame.time.Clock()
 snake_pos = [100, 50]
 snake_body = [[100, 50], [100-10, 50], [100-(2*10), 50]]
 
-food_pos = [random.randrange(1, (frame_size_x//10)) * 10, random.randrange(1, (frame_size_y//10)) * 10]
+# Food position will be within the white border, 4 is border_pos_x / 10 + 0.5, 6 is border_pos_y / 10 + 1, 
+food_pos = [random.randrange(4, ((border_size_x-border_pos_x)//10)) * 10, random.randrange(6, ((border_size_y-border_pos_y)//10)) * 10]
 food_spawn = True
+
 
 direction = 'RIGHT'
 change_to = direction
@@ -57,7 +59,8 @@ def game_over():
     game_window.blit(game_over_surface, game_over_rect)
     show_score(0, red, 'times', 20)
     pygame.display.flip()
-    time.sleep(3)
+    # 3 secunde ii pre mult imo
+    time.sleep(1)
     pygame.quit()
     sys.exit()
 
@@ -124,7 +127,7 @@ while True:
         snake_body.pop()
 
     if not food_spawn:
-        food_pos = [random.randrange(1, (frame_size_x//10)) * 10, random.randrange(1, (frame_size_y//10)) * 10]
+        food_pos = [random.randrange(4, ((border_size_x-border_pos_x)//10)) * 10, random.randrange(6, ((border_size_y-border_pos_y)//10)) * 10]
     food_spawn = True
 
     game_window.fill(black)
