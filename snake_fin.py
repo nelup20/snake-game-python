@@ -6,6 +6,11 @@ difficulty = 25
 frame_size_x = 720
 frame_size_y = 480
 
+border_size_x = 650
+border_size_y = 380
+border_pos_x = 35
+border_pos_y = 50
+
 check_errors = pygame.init()
 
 if check_errors[1] > 0:
@@ -105,7 +110,7 @@ while True:
         snake_pos[0] += 10 * speed_multiplier
 
     snake_body.insert(0, list(snake_pos))
-    
+
     # Am facut aici ca sa fie un range/game de valori. Ca daca faci exact == atunci cind ridici viteza snakeu nu poate sa ajunga fix la pozitia aceea, asa ca mai bine am pus ca daca valoarea positiei la snake e mai mare decit valaoare pozitiei la food - the multiplier 
     if snake_pos[0] > food_pos[0] - food_range_multiplier and snake_pos[0] < food_pos[0] +  food_range_multiplier and snake_pos[1] > food_pos[1] - food_range_multiplier and snake_pos[1] < food_pos[1] + food_range_multiplier:
         score += 1
@@ -128,9 +133,13 @@ while True:
 
     pygame.draw.rect(game_window, white, pygame.Rect(food_pos[0], food_pos[1], 10, 10))
 
-    if snake_pos[0] < 0 or snake_pos[0] > frame_size_x-10:
+    #Draw white rectangle, final argument 5 = width --> makes only border white, inside is transparent
+    pygame.draw.rect(game_window, pygame.Color(255,255,255), pygame.Rect(border_pos_x, border_pos_y, border_size_x, border_size_y), 5)
+
+    #Game Over if you go over any of the borders. Add border position + length/height of the border to get the true position (X,Y); -5 here is just to adjust so it visually is more correct, if u get rid of -5 you'll see it's not 100% perfect 
+    if snake_pos[0] < 0 or snake_pos[0] >= border_size_x + border_pos_x - 5 or snake_pos[0] < border_pos_x:
         game_over()
-    if snake_pos[1] < 0 or snake_pos[1] > frame_size_y-10:
+    if snake_pos[1] < 0 or snake_pos[1] >= border_size_y + border_pos_y or snake_pos[1] < border_pos_y:
         game_over()
     for block in snake_body[1:]:
         if snake_pos[0] == block[0] and snake_pos[1] == block[1]:
